@@ -1,51 +1,75 @@
-import { useState } from 'react';
-import products from './data/products';
+import { useState } from "react";
+import productsData from "./data/products";
+import "./App.css";
 
 function App() {
-  const [searchText, setSearchText] = useState('');
+  const [search, setSearch] = useState("");
+  const [sortOrder, setSortOrder] = useState("");
 
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchText.toLowerCase())
+  const cleanText = (text) =>
+    text.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+  // ✅ Currency formatter for Sri Lanka
+  const formatPrice = (price) =>
+    new Intl.NumberFormat("en-LK", {
+      style: "currency",
+      currency: "LKR",
+      minimumFractionDigits: 0,
+    }).format(price);
+
+  let filteredProducts = productsData.filter((product) =>
+    cleanText(product.name).includes(cleanText(search))
   );
 
+  if (sortOrder === "low") {
+    filteredProducts = [...filteredProducts].sort(
+      (a, b) => a.price - b.price
+    );
+  }
+
+  if (sortOrder === "high") {
+    filteredProducts = [...filteredProducts].sort(
+      (a, b) => b.price - a.price
+    );
+  }
+
   return (
-    <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
-      <h2>Product List</h2>
+    <div className="page">
+      <div className="container">
+        <h2 className="title">Product List</h2>
 
-      {/* Search Input */}
-      <input
-        type="text"
-        placeholder="Search product"
-        value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
-        style={{
-          width: '100%',
-          padding: '10px',
-          marginBottom: '20px',
-          borderRadius: '4px',
-          border: '1px solid #ccc',
-        }}
-      />
+        {/* SEARCH + SORT */}
+        <div className="controls">
+          <input
+            type="text"
+            placeholder="Search product"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
 
-      {/* Results */}
-      {searchText === '' ? null : filteredProducts.length === 0 ? (
-        <p>No matching items found</p>
-      ) : (
-        filteredProducts.map((product) => (
-          <div
-            key={product.id}
-            style={{
-              border: '1px solid #ccc',
-              padding: '12px',
-              marginBottom: '10px',
-              borderRadius: '4px',
-            }}
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
           >
-            <strong>{product.name}</strong>
-            <p>Price: ${product.price}</p>
-          </div>
-        ))
-      )}
+            <option value="">Sort by price</option>
+            <option value="low">Low to High</option>
+            <option value="high">High to Low</option>
+          </select>
+        </div>
+
+        {filteredProducts.length === 0 && (
+          <p className="empty-text">No matching items found</p>
+        )}
+
+        <div className="products">
+          {filteredProducts.map((product) => (
+            <div key={product.id} className="product-card">
+              <strong>{product.name}</strong>
+              <p>Price: {formatPrice(product.price)}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
