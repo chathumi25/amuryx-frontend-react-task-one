@@ -1,6 +1,9 @@
 import { useState } from "react";
 import productsData from "./data/products";
+import { Input, Select, Card } from "antd";
 import "./App.css";
+
+const { Option } = Select;
 
 function App() {
   const [search, setSearch] = useState("");
@@ -9,7 +12,7 @@ function App() {
   const cleanText = (text) =>
     text.toLowerCase().replace(/[^a-z0-9]/g, "");
 
-  // ✅ Currency formatter for Sri Lanka
+  // Currency formatter for Sri Lanka
   const formatPrice = (price) =>
     new Intl.NumberFormat("en-LK", {
       style: "currency",
@@ -38,23 +41,23 @@ function App() {
       <div className="container">
         <h2 className="title">Product List</h2>
 
-        {/* SEARCH + SORT */}
+        {/* SEARCH + SORT (Ant Design) */}
         <div className="controls">
-          <input
-            type="text"
+          <Input
             placeholder="Search product"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
 
-          <select
+          <Select
             value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value)}
+            onChange={(value) => setSortOrder(value)}
+            placeholder="Sort by price"
           >
-            <option value="">Sort by price</option>
-            <option value="low">Low to High</option>
-            <option value="high">High to Low</option>
-          </select>
+            <Option value="">Sort by price</Option>
+            <Option value="low">Low to High</Option>
+            <Option value="high">High to Low</Option>
+          </Select>
         </div>
 
         {filteredProducts.length === 0 && (
@@ -63,10 +66,10 @@ function App() {
 
         <div className="products">
           {filteredProducts.map((product) => (
-            <div key={product.id} className="product-card">
+            <Card key={product.id} className="product-card">
               <strong>{product.name}</strong>
               <p>Price: {formatPrice(product.price)}</p>
-            </div>
+            </Card>
           ))}
         </div>
       </div>
