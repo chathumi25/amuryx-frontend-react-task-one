@@ -6,7 +6,7 @@
 /* PAGE */
 .page {
   min-height: 100vh;
-  width: 100vw;              /* 🔥 FORCE FULL VIEWPORT */
+  width: 100vw; /* Full viewport */
   background: linear-gradient(135deg, #050b18, #0a1a2f);
   padding: 24px;
 }
@@ -14,7 +14,7 @@
 /* CONTAINER – FULL WIDTH */
 .container {
   width: 100%;
-  max-width: 100%;           /* 🔥 REMOVE LIMIT */
+  max-width: 100%;
 }
 
 /* TITLE */
@@ -37,6 +37,7 @@
   padding: 12px 0;
 }
 
+/* INPUT & SELECT */
 .controls input,
 .controls select {
   padding: 12px 16px;
@@ -51,7 +52,7 @@
   color: #aaa;
 }
 
-/* 🔥 PRODUCT GRID – FULL PAGE WIDTH */
+/* PRODUCT GRID – FULL PAGE WIDTH */
 .products {
   width: 100%;
   display: grid;
@@ -77,4 +78,36 @@
 .empty-text {
   color: #ccc;
   margin-top: 20px;
+}
+
+/* ========================= */
+/* 📱 MOBILE RESPONSIVE */
+/* ========================= */
+@media (max-width: 600px) {
+  .controls {
+    flex-direction: column;
+  }
+
+  .controls input,
+  .controls select {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .products {
+    grid-template-columns: 1fr; /* 1 card per row */
+  }
+
+  .page {
+    padding: 16px;
+  }
+}
+
+/* ========================= */
+/* 📲 TABLET RESPONSIVE */
+/* ========================= */
+@media (min-width: 601px) and (max-width: 900px) {
+  .products {
+    grid-template-columns: repeat(2, 1fr); /* 2 cards per row */
+  }
 }
